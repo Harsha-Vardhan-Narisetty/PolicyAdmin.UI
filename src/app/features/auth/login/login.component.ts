@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { LoginRequest } from '../../../core/models/login-request.model';
 import { LoginResponse } from '../../../core/models/login-response.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { StorageService } from '../../../core/services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder, 
-    private authService: AuthService
+    private authService: AuthService,
+    private storageService: StorageService
   ) {
 
     this.loginForm = this.fb.group({
@@ -32,18 +34,31 @@ export class LoginComponent {
   }
 
   login(): void{
-    const request = this.loginForm.value as LoginRequest;
+    if(this.loginForm.invalid){
+      return;
+    }
+
+    const request: LoginRequest = {
+      email: this.loginForm.value.email!,
+      password: this.loginForm.value.password!
+    };
 
     this.authService.login(request).subscribe({
       next: (response) => {
-        console.log("Login Successful");
-        
+        console.log('Login Successful');
+
         console.log(response.data);
+
+        this.storageService.saveToken(response.data.token);
+        this.storageService.saveUser(response.data);
       },
 
       error: (error) => {
-        console.error(error);
+        console.log(error);
       }
+
+      
+
     });
   }
 

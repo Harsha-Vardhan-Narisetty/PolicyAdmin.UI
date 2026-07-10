@@ -18,7 +18,7 @@ export class AuthService {
     request: LoginRequest
   ):Observable<ApiResponse<LoginResponse>>{
 
-    return this.http.post<any>(
+    return this.http.post<ApiResponse<LoginResponse>>(
       `${this.apiUrl}/login`,
       request
     );
