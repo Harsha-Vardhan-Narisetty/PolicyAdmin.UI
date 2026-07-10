@@ -4,6 +4,7 @@ import { LoginRequest } from '../../../core/models/login-request.model';
 import { LoginResponse } from '../../../core/models/login-response.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { StorageService } from '../../../core/services/storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder, 
     private authService: AuthService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private router: Router
   ) {
 
     this.loginForm = this.fb.group({
@@ -51,6 +53,7 @@ export class LoginComponent {
 
         this.storageService.saveToken(response.data.token);
         this.storageService.saveUser(response.data);
+        this.router.navigate(['/Dashboard']);
       },
 
       error: (error) => {
