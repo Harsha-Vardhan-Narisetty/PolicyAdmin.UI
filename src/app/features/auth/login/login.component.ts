@@ -53,7 +53,7 @@ export class LoginComponent {
 
         this.storageService.saveToken(response.data.token);
         this.storageService.saveUser(response.data);
-        this.router.navigate(['/Dashboard']);
+        this.router.navigateByUrl('/dashboard');
       },
 
       error: (error) => {
